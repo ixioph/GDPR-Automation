@@ -1,0 +1,13 @@
+#specific file
+configGen.py
+
+#python specific
+*.pyc
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swap
+*.out
+*.ini
