@@ -18,6 +18,27 @@ It works by first logging into the Zendesk and Jira services, then navigating to
 >             use the GDPR macro from gdparse.ini and submit
 ## Dependencies
 This script was written in Python3 and requires the [Selenium Python webdriver](https://selenium-python.readthedocs.io/installation.html).
+### Configuration
+The config file is named _gdparse.ini_ and is formatted in the following way:
+```
+[credentials]
+zendesk_uid = <zendesk account email>
+zendesk_upw = <zendesk password>
+jira_uid = <google sign-in jira email>
+jira_upw = < google sign-in password>
+
+[links]
+zendesk_gdpr_queue = https://YOUR-SUBDOMAIN.zendesk.com/agent/filters/YOUR-VIEW-NUM
+zendesk_ticket_prepend = https://YOUR-SUBDOMAIN.zendesk.com/agent/tickets/
+zendesk_login = https://YOUR-SUBDOMAIN.zendesk.com/auth/v2/login/signin?
+jira_login = https://id.atlassian.com/login
+jira_dashboard = https://YOUR-SUBDOMAIN.atlassian.net/secure/Dashboard.jspa
+jira_reported_by_me = https://YOUR-SUBDOMAIN.atlassian.net/issues/?filter=-2
+
+[text-fields]
+jira_tx_summary = GDPR Request From:
+jira_tx_labels = <your organization's labels>
+```
 ## Noteworthy Classes
 ### GDPRRequester()
 Handles the information associated with the source Zendesk request, such as user identification (email, account ID) and ticket information.

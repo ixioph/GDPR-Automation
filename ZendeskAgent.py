@@ -21,7 +21,6 @@ class ZendeskAgent():
         self.agentEmail = parser.get('credentials','zendesk_uid')
         self.agentPassword = parser.get('credentials','zendesk_upw')
         self.loginURL = parser.get('links', 'zendesk_login')
-        #self.wipeMacro = parser.get('text-fields', 'zendesk_wipe_macro')
 
     def login(self, driver, driverElements):
         driver.implicitly_wait(5)
@@ -44,7 +43,6 @@ class ZendeskAgent():
     def scanQueue(self, driver, prepend):
         requestQueue = []
         for tick in driver.find_elements_by_css_selector("tr.LRbd"):
-            #create a new GDPR requester
             requester = GDPRRequester()
             requester.setTicket(tick.find_elements_by_css_selector("td")[4].text[1:])
             print(requester.ticketNum)
@@ -58,7 +56,6 @@ class ZendeskAgent():
         driver.implicitly_wait(12)
         print("Tagging Zendesk ticket with Jira data key")
         intNoteBtn = driverElements.getElement('//span[text()[contains(., "Internal note")]]', "xpath")
-        #driverElements.getElement('//li[contains(@title, "' + requester.email + '")]', 'xpath')
         print(intNoteBtn.text)
         intNoteBtn.click()
         time.sleep(1)
@@ -84,11 +81,7 @@ class ZendeskAgent():
             print(self.unexpectedError, sys.exc_info()[0])
 
     def respondWipeMacro(self, driver, driverElements, url):
-        #driver.get(url)
         driver.implicitly_wait(12)
-        #replyBtn = driverElements.getElement('//span[text()[contains(., "Public reply")]]', "xpath")
-        #print(replyBtn.text)
-        #replyBtn.click()
         time.sleep(1)
         commentField = driverElements.getElement("div.ember-view > textarea", "css selector")
         commentField.send_keys(self.wipeMacro)
@@ -110,9 +103,6 @@ class ZendeskAgent():
                 print(self.unexpectedError, sys.exc_info()[0])
         except:
             print(self.unexpectedError, sys.exc_info()[0])
-        #submitBtn.click()
-
-        #return False
 
 
 

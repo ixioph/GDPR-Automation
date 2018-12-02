@@ -71,7 +71,6 @@ class JiraAgent():
         except:
             print('Error Opening Jira Ticket Creation: ', sys.exc_info()[0])
 
-        #summary is: "GDPR // Wipe // user: <requester-email>"
         summaryField = driverElements.getElement('//input[@id="summary"]', "xpath")
         descriptionField = driverElements.getElement('//textarea[@id="description"]', "xpath")
         tickLabels = driverElements.getElement('//textarea[@id="labels-textarea"]', "xpath")
@@ -82,21 +81,20 @@ class JiraAgent():
 
         print("Filling in Jira ticket details")
 
+
         try:
             ActionChains(driver).move_to_element(summaryField).click().perform()
             summaryField.send_keys(summaryFieldType)
 
-            #description is user message
             ActionChains(driver).move_to_element(descriptionField).click().perform()
             descriptionField.send_keys(requester.message)
 
-            #labels "gdpr" and "wipe"
             ActionChains(driver).move_to_element(tickLabels).click().perform()
             tickLabels.send_keys(self.ticketLabel)
         except:
             print("Failed to fill in user information: ", sys.exc_info()[0])
 
-        #project type is customer support
+
         try:
             ActionChains(driver).move_to_element(projectField).click().send_keys(self.projectFieldText).perform()
             time.sleep(1)
@@ -115,7 +113,7 @@ class JiraAgent():
         except:
             print(self.unexpectedError, sys.exc_info()[0])
 
-        #issue type is request
+
         try:
             ActionChains(driver).move_to_element(issueField).click().send_keys(self.issueFieldText).perform()
             time.sleep(1)
@@ -135,7 +133,6 @@ class JiraAgent():
             print(self.unexpectedError, sys.exc_info()[0])
 
         print("Fields have been completed. Creating Ticket.")
-        #create that shit, yo
         createBtn = driverElements.getElement('//input[@id="create-issue-submit"]',"xpath")
         createBtn.click()
         print("Ticket Created.")
@@ -151,8 +148,6 @@ class JiraAgent():
 
         try:
             print("searching for xpath: " + '//*[@title="' + titleText + '"]')
-            #driverElements.getElement('//li[contains(@title, "' + requester.email + '")]', 'xpath')
-            #titleXpath = '//*[@title="' + titleText + '"]'
             titleXpath = '//li[contains(@title, "' + requester.email + '")]'
             title = driverElements.getElement(titleXpath, "xpath")
             print(str(title))

@@ -1,6 +1,6 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium import webdriver
 import sys
 
 class GetElementWrapper():
@@ -49,7 +49,6 @@ class GetElementWrapper():
             print(self.unexpectedError, sys.exc_info()[0])
         return element
 
-    # return True if element is not None else False
     def isElementPresent(self, locator, byType):
         element = None
         try:

@@ -25,8 +25,6 @@ from JiraAgent import JiraAgent
 #             use the GDPR macro and place the ticket on hold
 #     close the GDPRProgram
 
-
-
 class HandleGDPRTickets():
 
     def automate(self):
