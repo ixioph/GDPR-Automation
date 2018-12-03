@@ -16,10 +16,36 @@ It works by first logging into the Zendesk and Jira services, then navigating to
 >                 return the resulting Jira ticket number
 >             place the Jira ticket number in an internal comment on Zendesk and submit
 >             use the GDPR macro from gdparse.ini and submit
+
+## Table of Contents
+  * [Dependencies](#dependencies)
+  * [Known Issues](#known-issues)
+  * [Configuration](#configuration)
+  * [Noteworthy Classes](#noteworthy-classes)
+    - [GDPRRequester](#gdprrequester)
+    - [JiraAgent](#jiraagent)
+    - [ZendeskAgent](#zendeskagent)
+    - [GetElementWrapper](#getelementwrapper)
+  * [Functions](#functions)
+    - [ZendeskAgent.login()](#zendeskagent.login)
+    - [JiraAgent.login()](#jiraagent.login)
+    - [ZendeskAgent.scanQueue()](#zendeskagent.scanqueue)
+    - [GDPRRequester.gatherInfo()](#gdprrequester.gatherinfo)
+    - [JiraAgent.createTicket()](#jiraagent.createticket)
+    - [JiraAgent.storeDataKey()](#jiraagent.storedatakey)
+    - [ZendeskAgent.respondInternal()](#zendeskagent.respondinternal)
+    - [ZendeskAgent.respondWipeMacro()](#zendeskagent.respondwipemacro)
+    - [GetElementWrapper.getByType()](#getelementwrapper.getbytype)
+    - [GetElementWrapper.getElement()](#getelementwrapper.getelement)
+    - [GetElementWrapper.isElementPresent()](#getelementwrapper.iselementpresent)
 ## Dependencies
 This script was written in Python3 and requires the [Selenium Python webdriver](https://selenium-python.readthedocs.io/installation.html).
-### Configuration
-The config file is named _gdparse.ini_ and is formatted in the following way:
+## Known issues
+  * When submitting a Zendesk ticket, the submission type (Open, Pending, Solved) can't be selected
+  * When grabbing the GDPR tickets, currently only the first page is stored
+  * When creating the Jira issue, either _Project_ or _Issue type_ will remain unchanged, depending on which is first
+## Configuration
+The config file is named _gdparse.ini_ and has been the following format:
 ```
 [credentials]
 zendesk_uid = <zendesk account email>
@@ -40,16 +66,16 @@ jira_tx_summary = GDPR Request From:
 jira_tx_labels = <your organization's labels>
 ```
 ## Noteworthy Classes
-### GDPRRequester()
+### GDPRRequester
 Handles the information associated with the source Zendesk request, such as user identification (email, account ID) and ticket information.
-### JiraAgent()
+### JiraAgent
 Handles all of the functions associated with the Jira account, such as data key retrieval and ticket creation.
-### ZendeskAgent()
+### ZendeskAgent
 Handles all of the functions associated with the Zendesk account, such as queue parsing and ticket responses and tagging.
-### GetElementWrapper()
+### GetElementWrapper
 Wrapper that modularizes and does exception handling for common Selenium element queries.
 ## Functions
-#### ZendeskAgent.login()
+#### ZendeskAgent.login
 Responsible for finding and filling the fields necessary to log into the Zendesk support page.
 ```python
 def login(self, driver, driverElements):
@@ -70,7 +96,7 @@ def login(self, driver, driverElements):
     print("Logging into Zendesk as: " + self.agentEmail)
     time.sleep(5)
 ```
-#### JiraAgent.login()
+#### JiraAgent.login
 Responsible for finding and filling the fields necessary to log into the Jira dashboard.
 ```python
   def login(self, driver, driverElements):
@@ -102,7 +128,7 @@ Responsible for finding and filling the fields necessary to log into the Jira da
     driver.implicitly_wait(10)
     time.sleep(1)
 ```
-#### ZendeskAgent.scanQueue()
+#### ZendeskAgent.scanQueue
 Iterates over the list of Zendesk requests and creates an array of GDPRRequester objects.
 ```python
 def scanQueue(self, driver, prepend):
@@ -116,7 +142,7 @@ def scanQueue(self, driver, prepend):
         requestQueue.append(requester)
     return requestQueue
 ```
-#### GDPRRequester.gatherInfo()
+#### GDPRRequester.gatherInfo
 Scrapes the ticket for relevant user information for storing within the GDPRRequester object.
 ```python
 def gatherInfo(self, driver, driverElements):
@@ -125,7 +151,7 @@ def gatherInfo(self, driver, driverElements):
     self.setMessage(driver)
     driver.implicitly_wait(12)
 ```
-#### JiraAgent.createTicket()
+#### JiraAgent.createTicket
 Using the information provided from the Zendesk ticket, creates a Jira ticket.
 ```python
 def createTicket(self, requester, driver, driverElements):
@@ -208,7 +234,7 @@ def createTicket(self, requester, driver, driverElements):
     createBtn.click()
     print("Ticket Created.")
 ```
-#### JiraAgent.storeDataKey()
+#### JiraAgent.storeDataKey
 Uses the requester's email address (which was placed into the Jira ticket summary) to locate the "data-key" attribute
 ```python
 def storeDataKey(self, requester, driver, driverElements):
@@ -233,7 +259,7 @@ def storeDataKey(self, requester, driver, driverElements):
         return False
     print("Grabbed Jira: " + requester.jira)
 ```
-#### ZendeskAgent.respondInternal()
+#### ZendeskAgent.respondInternal
 Places an internal note containing the corresponding Jira data-key in a Zendesk ticket
 ```python
 def respondInternal(self, driver, driverElements, url, msg):
@@ -266,7 +292,7 @@ def respondInternal(self, driver, driverElements, url, msg):
     except:
         print(self.unexpectedError, sys.exc_info()[0])
 ```
-#### ZendeskAgent.respondWipeMacro()
+#### ZendeskAgent.respondWipeMacro
 Submits a response to the requester which notifies them that their request has been added to the queue
 ```python
 def respondWipeMacro(self, driver, driverElements, url):
@@ -297,7 +323,7 @@ def respondWipeMacro(self, driver, driverElements, url):
     except:
         print(self.unexpectedError, sys.exc_info()[0])
 ```
-#### GetElementWrapper.getByType()
+#### GetElementWrapper.getByType
 Returns the appropriate Selenium *By attribute* based on the provided string.
 ```python
 def getByType(self, type):
@@ -322,7 +348,7 @@ def getByType(self, type):
         print(self.noSupport)
         return False
 ```
-#### GetElementWrapper.getElement()
+#### GetElementWrapper.getElement
 Returns an element when provided with a locator/identifier and a query type.
 ```python
 def getElement(self, locator, queryType="id"):
@@ -338,7 +364,7 @@ def getElement(self, locator, queryType="id"):
         print(self.unexpectedError, sys.exc_info()[0])
     return element
 ```
-#### GetElementWrapper.isElementPresent()
+#### GetElementWrapper.isElementPresent
 Exception handling. Checks whether the provided criteria returns a match within the DOM.
 ```python
 def isElementPresent(self, locator, byType):
