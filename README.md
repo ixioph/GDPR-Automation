@@ -1,9 +1,10 @@
 # GDPR-Automation
-## Brief
-A python script which utilizes the Selenium webdriver to automate the conversion of General Data Protection Regulation customer requests, received within Zendesk, into Jira tickets. Written for the **Chrome Browser**.
 ## Summary
-This script requires an initialization file(format provided below) containing the necessary credentials and links in order to navigate the sites unimpeded.
+A python script which utilizes the Selenium webdriver to automate the conversion of General Data Protection Regulation customer requests, received within Zendesk, into Jira tickets. Written for the **Chrome Browser**.<br><br>
+This script requires a confguration file(format provided below) containing the necessary credentials and links in order to navigate the sites unimpeded.<br><br>
 It works by first logging into the Zendesk and Jira services, then navigating to the GDPR queue (where the first field has been made request number)
+## Pseudocode
+
 >     Navigate to Zendesk website
 >         enter username and password and login from gdparse.ini file
 >     Navigate to the Jira website
