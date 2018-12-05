@@ -15,6 +15,7 @@ class ZendeskAgent():
     loginURL = ''
     agentEmail = ""
     agentPassword = ""
+    unexpectedError = "An Unexpected Error has Occurred: "
     wipeMacro = "Hi there,\n\nThanks so much for emailing in. The security of your data is important to us! We have reached out to our internal operations to have your data removed in its entirety. \n\nYour request has been placed into the queue--We will notify you just as soon as it has been processed. Thank you for your continued patience!"
 
     def __init__(self, parser):

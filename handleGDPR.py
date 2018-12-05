@@ -25,6 +25,14 @@ from JiraAgent import JiraAgent
 #             use the GDPR macro and place the ticket on hold
 #     close the GDPRProgram
 
+  #########################   #########################
+ ###   ###########################################   ###
+############     #######################     ############
+ ######################     #     ######################
+  #########################   #########################
+
+# TODO: Better exception handling (auto crash w/ debug info on exceptions)
+
 class HandleGDPRTickets():
 
     def automate(self):
