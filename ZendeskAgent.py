@@ -43,7 +43,11 @@ class ZendeskAgent():
 
     def scanQueue(self, driver, prepend):
         requestQueue = []
-        for tick in driver.find_elements_by_css_selector("tr.LRbd"):
+        print("Outside Loop...")
+        for tick in driver.find_elements(By.XPATH, '//tr[@data-test-id="table-regular-row"]'):
+        #for tick in driver.find_elements_by_css_selector("tr.LRbd"):
+            print("FOUND a ticket")
+            #time.sleep(2)
             requester = GDPRRequester()
             requester.setTicket(tick.find_elements_by_css_selector("td")[4].text[1:])
             print(requester.ticketNum)
@@ -81,13 +85,16 @@ class ZendeskAgent():
         except:
             print(self.unexpectedError, sys.exc_info()[0])
 
+        driver.implicitly_wait(10)
+
     def respondWipeMacro(self, driver, driverElements, url):
         driver.implicitly_wait(12)
         time.sleep(1)
         commentField = driverElements.getElement("div.ember-view > textarea", "css selector")
         commentField.send_keys(self.wipeMacro)
-        time.sleep(2)
-        driver.implicitly_wait(10)
+        time.sleep(3)
+        #If leave page warning prompt, click cancel and continue...
+        driver.implicitly_wait(12)
         submitBtn = driverElements.getElement("button[data-test-id*='submit_button-button']", "css selector")
         try:
             ActionChains(driver).move_to_element(submitBtn).click().perform()
@@ -104,6 +111,8 @@ class ZendeskAgent():
                 print(self.unexpectedError, sys.exc_info()[0])
         except:
             print(self.unexpectedError, sys.exc_info()[0])
+
+        driver.implicitly_wait(10)
 
 
 

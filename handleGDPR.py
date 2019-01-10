@@ -75,6 +75,7 @@ class HandleGDPRTickets():
 
             zAgent.respondInternal(driver, driverElements, requester.ticketURL, requester.jira)
             zAgent.respondWipeMacro(driver, driverElements, requester.ticketURL)
+            time.sleep(1)
 
         time.sleep(25)
 
