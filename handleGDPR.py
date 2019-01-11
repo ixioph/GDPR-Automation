@@ -81,23 +81,26 @@ class HandleGDPRTickets():
         time.sleep(25)
 
 def main():
+    GDPRProgram = HandleGDPRTickets()
     if len(sys.argv) > 2:
         print("Too many arguments. Exiting.")
         return 1
     elif len(sys.argv) == 1:
         print("No argument provided. Exiting.")
         return 2
-    elif argv[1] == "--report":
-        GDPRProgram = HandleGDPRTickets()
+    elif sys.argv[1] == "--report":
         GDPRProgram.automate()
         return 0
-    elif argv[1] == "--check":
+    elif sys.argv[1] == "--check":
+        print("This will later open the reported file, check against the Jira ticket, and move the hits to a new 'ready' file")
         #iterates over the saved jira keys and checks to see if they're ready to resolve
         return 0
-    elif argv[1] == "--resolve":
+    elif sys.argv[1] == "--resolve":
+        print("This will later check the 'ready' file and complete the GDPR process")
         #iterates over the list of keys that have been marked ready and sends customer follow-up
         return 0
-    elif argv[1] == "--help":
+    elif sys.argv[1] == "--help":
+        print("How am I supposed to help you in conditions like this?! HOW?!?")
         #prints to console a list of available commands
         return 0
     else:
