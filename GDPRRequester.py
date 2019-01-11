@@ -11,6 +11,7 @@ class GDPRRequester():
     ticketNum = ""
     ticketURL = ""
     jira = ""
+    reportFile = "outFile.out"
 
     def setName(self, name):
         self.name = name
@@ -33,3 +34,10 @@ class GDPRRequester():
         driver.implicitly_wait(12)
         self.setMessage(driver)
         driver.implicitly_wait(12)
+
+    def markAsReported(self):
+        #Takes the returned key after Jira creation and saves all of the user information for replying later
+        outFile = open(self.reportFile, "a+")
+        outFile.write(self.email + ";" + self.jira + ";" + self.ticketNum + "\n") #user print command here?
+        outFile.close()
+        #return key

@@ -34,7 +34,6 @@ from JiraAgent import JiraAgent
 # TODO: Better exception handling (auto crash w/ debug info on exceptions)
 
 class HandleGDPRTickets():
-
     def automate(self):
 
         parser = configparser.ConfigParser()
@@ -76,9 +75,33 @@ class HandleGDPRTickets():
             zAgent.respondInternal(driver, driverElements, requester.ticketURL, requester.jira)
             zAgent.respondWipeMacro(driver, driverElements, requester.ticketURL)
             time.sleep(1)
+            driver.implicitly_wait(6)
+            requester.markAsReported()
 
         time.sleep(25)
 
+def main():
+    if len(sys.argv) > 2:
+        print("Too many arguments. Exiting.")
+        return 1
+    elif len(sys.argv) == 1:
+        print("No argument provided. Exiting.")
+        return 2
+    elif argv[1] == "--report":
+        GDPRProgram = HandleGDPRTickets()
+        GDPRProgram.automate()
+        return 0
+    elif argv[1] == "--check":
+        #iterates over the saved jira keys and checks to see if they're ready to resolve
+        return 0
+    elif argv[1] == "--resolve":
+        #iterates over the list of keys that have been marked ready and sends customer follow-up
+        return 0
+    elif argv[1] == "--help":
+        #prints to console a list of available commands
+        return 0
+    else:
+        print("Invalid argument provided. Use 'handleGDPR.py --help' to view available arguments")
 
-GDPRProgram = HandleGDPRTickets()
-GDPRProgram.automate()
+if __name__ == "__main__":
+    main()
